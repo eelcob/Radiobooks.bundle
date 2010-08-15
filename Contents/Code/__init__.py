@@ -1,7 +1,4 @@
 # -*- coding: utf-8 -*-
-from PMS import *
-from PMS.Objects import *
-from PMS.Shortcuts import *
 
 ###################################################################################################
 
@@ -67,7 +64,7 @@ def MainMenu():
 def Listbooks(sender, i, title, icon, start):
   dir = MediaContainer(viewGroup='Details', title2=title)
 
-  books = XML.ElementFromURL(RADIOBOOKS_RSS % RADIOBOOKS_LANGUAGE[i][0], isHTML=True, encoding='UTF-8', errors='ignore').xpath('//channel/item')
+  books = HTML.ElementFromURL(RADIOBOOKS_RSS % RADIOBOOKS_LANGUAGE[i][0], encoding='UTF-8', errors='ignore').xpath('//channel/item')
 
   end = start+int(Prefs.Get('numItems'))
   if end > len(books):
