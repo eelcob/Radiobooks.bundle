@@ -66,7 +66,7 @@ def Listbooks(sender, i, title, icon, start):
 
   books = HTML.ElementFromURL(RADIOBOOKS_RSS % RADIOBOOKS_LANGUAGE[i][0], encoding='UTF-8', errors='ignore').xpath('//channel/item')
 
-  end = start+int(Prefs.Get('numItems'))
+  end = start+int(10)
   if end > len(books):
     end = len(books)
 
