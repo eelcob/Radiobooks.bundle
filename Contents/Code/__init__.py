@@ -26,7 +26,7 @@ def Start():
   MediaContainer.art = R(ART)
 
   # Set the default cache time
-  HTTP.CacheTime(CACHE_1DAY)
+  HTTP.CacheTime = CACHE_1DAY
 
 ###################################################################################################
 def MainMenu():
