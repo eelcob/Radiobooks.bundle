@@ -1,67 +1,47 @@
 # -*- coding: utf-8 -*-
 
-###################################################################################################
+NAME = 'Radiobooks'
+RADIOBOOKS_RSS = 'http://www.radiobooks.eu/xml/rss.php?lang=%s'
+RADIOBOOKS_LANGUAGE = [
+  ['EN', 'Radiobooks (English)'],
+  ['NL', 'Radioboeken (Nederlands)'],
+  ['FR', 'Radiolivre (Français)'],
+  ['ES', 'Radiolibro (Español)']
+]
 
-PLUGIN_TITLE              = 'Radiobooks'
-PLUGIN_PREFIX             = '/music/radiobooks'
-
-RADIOBOOKS_RSS            = 'http://www.radiobooks.eu/xml/rss.php?lang=%s'
-RADIOBOOKS_LANGUAGE       = [
-                              ['EN', 'Radiobooks (English)'],
-                              ['NL', 'Radioboeken (Nederlands)'],
-                              ['FR', 'Radiolivre (Français)'],
-                              ['ES', 'Radiolibro (Español)']
-                            ]
-
-CACHE_INTERVAL            = 86400
-
-# Default artwork and icon(s)
-PLUGIN_ARTWORK            = 'art-default.png'
-PLUGIN_ICON_DEFAULT       = 'icon-default.png'
+ART = 'art-default.jpg'
+ICON = 'icon-default.png'
 
 ###################################################################################################
-
 def Start():
-  Plugin.AddPrefixHandler(PLUGIN_PREFIX, MainMenu, L("PLUGIN_TITLE"))
+
+  Plugin.AddPrefixHandler('/music/radiobooks', MainMenu, L("NAME"), ICON, ART)
 
   Plugin.AddViewGroup("List", viewMode="List", mediaType="items")
   Plugin.AddViewGroup('Details', viewMode='InfoList', mediaType='items')
 
   # Set the default MediaContainer attributes
-  MediaContainer.title1         = L("PLUGIN_TITLE")
-  MediaContainer.viewGroup      = 'List'
-  MediaContainer.art            = R(PLUGIN_ARTWORK)
+  MediaContainer.title1 = L("NAME")
+  MediaContainer.viewGroup = 'List'
+  MediaContainer.art = R(ART)
 
   # Set the default cache time
-  HTTP.SetCacheTime(CACHE_INTERVAL)
+  HTTP.CacheTime(CACHE_1DAY)
 
 ###################################################################################################
-
-def UpdateCache():
-  for i in range(0, len(RADIOBOOKS_LANGUAGE)):
-    HTTP.Request(RADIOBOOKS_RSS % RADIOBOOKS_LANGUAGE[i][0])
-
-###################################################################################################
-
-def CreatePrefs():
-  Prefs.Add(id='numItems', type='enum', default='25', label=L("PREFS_ITEMS"), values='10|25|50|100')
-
-###################################################################################################
-
 def MainMenu():
+
   dir = MediaContainer()
 
   for i in range(0, len(RADIOBOOKS_LANGUAGE)):
     icon = 'icon-' + RADIOBOOKS_LANGUAGE[i][0] + '.png'
     dir.Append(Function(DirectoryItem(Listbooks, title=RADIOBOOKS_LANGUAGE[i][1], thumb=R(icon)), i=i, title=RADIOBOOKS_LANGUAGE[i][1], icon=icon, start=0))
 
-  dir.Append(PrefsItem(L("PREFERENCES"), thumb=R(PLUGIN_ICON_DEFAULT)))
-
   return dir
 
 ###################################################################################################
-
 def Listbooks(sender, i, title, icon, start):
+
   dir = MediaContainer(viewGroup='Details', title2=title)
 
   books = HTML.ElementFromURL(RADIOBOOKS_RSS % RADIOBOOKS_LANGUAGE[i][0], encoding='UTF-8', errors='ignore').xpath('//channel/item')
@@ -85,9 +65,9 @@ def Listbooks(sender, i, title, icon, start):
   return dir
 
 ###################################################################################################
-
 # Let's hope this is temporary!
 def Cleanup(text):
+
   text = text.replace('Â', '')
 
   text = text.replace('Ã¢', 'â')
