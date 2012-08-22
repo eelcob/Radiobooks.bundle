@@ -15,13 +15,13 @@ ICON = 'icon-default.png'
 ###################################################################################################
 def Start():
 
-  Plugin.AddPrefixHandler('/music/radiobooks', MainMenu, L("NAME"), ICON, ART)
+  Plugin.AddPrefixHandler('/music/radiobooks', MainMenu, NAME, ICON, ART)
 
   Plugin.AddViewGroup("List", viewMode="List", mediaType="items")
   Plugin.AddViewGroup('Details', viewMode='InfoList', mediaType='items')
 
   # Set the default MediaContainer attributes
-  MediaContainer.title1 = L("NAME")
+  MediaContainer.title1 = NAME
   MediaContainer.viewGroup = 'List'
   MediaContainer.art = R(ART)
 
